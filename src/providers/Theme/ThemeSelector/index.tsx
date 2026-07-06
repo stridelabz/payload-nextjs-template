@@ -1,27 +1,25 @@
-'use client'
+"use client"
 
+import React, { useState } from "react"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
-import React, { useState } from 'react'
-
-import type { Theme } from './types'
-
-import { useTheme } from '..'
-import { themeLocalStorageKey } from './types'
+} from "@/components/ui/select"
+import { useTheme } from ".."
+import type { Theme } from "./types"
+import { themeLocalStorageKey } from "./types"
 
 export const ThemeSelector: React.FC = () => {
   const { setTheme } = useTheme()
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState("")
 
-  const onThemeChange = (themeToSet: Theme & 'auto') => {
-    if (themeToSet === 'auto') {
+  const onThemeChange = (themeToSet: Theme & "auto") => {
+    if (themeToSet === "auto") {
       setTheme(null)
-      setValue('auto')
+      setValue("auto")
     } else {
       setTheme(themeToSet)
       setValue(themeToSet)
@@ -30,7 +28,7 @@ export const ThemeSelector: React.FC = () => {
 
   React.useEffect(() => {
     const preference = window.localStorage.getItem(themeLocalStorageKey)
-    setValue(preference ?? 'auto')
+    setValue(preference ?? "auto")
   }, [])
 
   return (

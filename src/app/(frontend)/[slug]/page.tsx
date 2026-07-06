@@ -1,22 +1,20 @@
-import type { Metadata } from 'next'
-
-import { PayloadRedirects } from '@/components/PayloadRedirects'
-import configPromise from '@payload-config'
-import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import { draftMode } from 'next/headers'
-import React, { cache } from 'react'
-import { homeStatic } from '@/endpoints/seed/home-static'
-
-import { RenderBlocks } from '@/blocks/RenderBlocks'
-import { RenderHero } from '@/heros/RenderHero'
-import { generateMeta } from '@/utilities/generateMeta'
-import PageClient from './page.client'
-import { LivePreviewListener } from '@/components/LivePreviewListener'
+import configPromise from "@payload-config"
+import type { Metadata } from "next"
+import { draftMode } from "next/headers"
+import { getPayload, type RequiredDataFromCollectionSlug } from "payload"
+import React, { cache } from "react"
+import { RenderBlocks } from "@/blocks/RenderBlocks"
+import { LivePreviewListener } from "@/components/LivePreviewListener"
+import { PayloadRedirects } from "@/components/PayloadRedirects"
+import { homeStatic } from "@/endpoints/seed/home-static"
+import { RenderHero } from "@/heros/RenderHero"
+import { generateMeta } from "@/utilities/generateMeta"
+import PageClient from "./page.client"
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const pages = await payload.find({
-    collection: 'pages',
+    collection: "pages",
     draft: false,
     limit: 1000,
     overrideAccess: false,
@@ -28,7 +26,7 @@ export async function generateStaticParams() {
 
   const params = pages.docs
     ?.filter((doc) => {
-      return doc.slug !== 'home'
+      return doc.slug !== "home"
     })
     .map(({ slug }) => {
       return { slug }
@@ -45,18 +43,18 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const { slug = "home" } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const url = '/' + decodedSlug
-  let page: RequiredDataFromCollectionSlug<'pages'> | null
+  const url = "/" + decodedSlug
+  let page: RequiredDataFromCollectionSlug<"pages"> | null
 
   page = await queryPageBySlug({
     slug: decodedSlug,
   })
 
   // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
+  if (!page && slug === "home") {
     page = homeStatic
   }
 
@@ -81,7 +79,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
+  const { slug = "home" } = await paramsPromise
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const page = await queryPageBySlug({
@@ -97,7 +95,7 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'pages',
+    collection: "pages",
     draft,
     limit: 1,
     pagination: false,
