@@ -9,9 +9,7 @@
 @custom-variant md (@media (width >= theme(--breakpoint-md)));
 @custom-variant lg (@media (width >= theme(--breakpoint-lg)));
 @custom-variant xl (@media (width >= theme(--breakpoint-xl)));
-@custom-variant
-2
-xl (@media (width >= theme(--breakpoint-2xl)));
+@custom-variant 2xl (@media (width >= theme(--breakpoint-2xl)));
 
 @layer base {
   h1,

@@ -1,31 +1,35 @@
-version: "3"
-
 services:
-  payload:
-    image: node:18-alpine
-    ports:
-      - "3000:3000"
-    volumes:
-      - .:/home/node/app
-      - node_modules:/home/node/app/node_modules
-    working_dir: /home/node/app/
-    command: sh -c "yarn install && yarn dev"
-    depends_on:
-      - mongo
-    env_file:
-      - .env
+  # payload:
+  #   image: oven/bun:latest
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - .:/home/node/app
+  #     - node_modules:/home/node/app/node_modules
+  #   working_dir: /home/node/app/
+  #   command: sh -c "bun install && bun run dev"
+  #   depends_on:
+  #     - postgres
+  #   env_file:
+  #     - .env
 
-  mongo:
-    image: mongo:latest
+  postgres:
+    image: postgres:17-trixie
+    restart: always
     ports:
-      - "27017:27017"
-    command:
-      - --storageEngine=wiredTiger
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: mydatabase
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  data:
-  node_modules:
+  pgdata:
+  # node_modules:
